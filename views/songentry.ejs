@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/songentry.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <h1>Song Entry for <%= user.local.email %></h1>
+
+    <h2><%= message %></h2>
+
+    <% if (message.length > 0) { %>
+    <div class="alert alert-danger"><%= message %></div>
+    <% } %>
+
+    <a href="/songs">Back to song list</a>
+    <br>
+
+    <button id="submitButton" type="submit" class="btn btn-primary">Submit</button>
+
+    <% if (success.length > 0) { %>
+    <div class="alert alert-success"><%= success %></div>
+    <% } %>
+    <form id="songEntryForm">
+
+        <fieldset class="form-group" required="true">
+            <label for="title">Title</label>
+            <input class="form-control" id="title" placeholder="Enter title" value="<%= song.name %>">
+        </fieldset>
+        <fieldset class="form-group" required="true">
+            <label for="audio">Audio link</label>
+            <input class="form-control" id="audio" placeholder="Enter audio link" value="<%= song.audio %>">
+        </fieldset>
+        <fieldset class="form-group" required="true">
+            <label for="midi">MIDI link</label>
+            <input  class="form-control" id="midi" placeholder="Enter midi link" value="<%= song.midi %>">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="thumbnail">Thumbnail link</label>
+            <input  class="form-control" id="thumbnail" placeholder="Enter thumbnail link" value="<%= song.thumbnail %>">
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="background">Background link</label>
+            <input class="form-control" id="background" placeholder="Enter background link" value="<%= song.background %>">
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="public" >Public</label>
+            <input type="checkbox" <% if (song.public == "true") {{%> checked <%}} %> id="public">
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="difficulty">Difficult</label>
+            <select  class="form-control" id="difficulty">
+                <option <% if (song.difficulty == "Easy") {{%> selected <%}} %>>Easy</option>
+                <option <% if (song.difficulty == "Normal") {{%> selected <%}} %>>Normal</option>
+                <option <% if (song.difficulty == "Hard") {{%> selected <%}} %>>Hard</option>
+                <option <% if (song.difficulty == "Expert") {{%> selected <%}} %>>Expert</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="composer">Composer</label>
+            <input class="form-control" id="composer" placeholder="Enter composer" value="<%= song.composer %>">
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="album">Album</label>
+            <input class="form-control" id="album" placeholder="Enter album" value="<%= song.album %>">
+        </fieldset>
+
+        <% if (song._id) { %>
+            <input type="hidden" class="form-control" id="_id" placeholder="Enter album" value="<%= song._id %>">
+        <% } %>
+        <!-- <fieldset class="form-group">
+          <label for="exampleInputPassword1">Password</label>
+          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="difficulty">Example select</label>
+          <select class="form-control" id="difficulty">
+            <option>Easy</option>
+            <option>Normal</option>
+            <option>Hard</option>
+            <option>Expert</option>
+          </select>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="exampleSelect2">Example multiple select</label>
+          <select multiple class="form-control" id="exampleSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </fieldset>
+        <fieldset class="form-group">
+          <label for="exampleTextarea">Example textarea</label>
+          <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+        </fieldset> -->
+        <!--   <fieldset class="form-group">
+            <label for="exampleInputFile">File input</label>
+            <input type="file" class="form-control-file" id="exampleInputFile">
+            <small class="text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+          </fieldset> -->
+        <!--   <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+              Option one is this and that&mdash;be sure to include why it's great
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+              Option two can be something else and selecting it will deselect option one
+            </label>
+          </div>
+          <div class="radio disabled">
+            <label>
+              <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3" disabled>
+              Option three is disabled
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"> Check me out
+            </label>
+          </div> -->
+    </form>
+</div>
+</body>
+</html>
