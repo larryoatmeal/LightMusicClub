@@ -1,14 +1,26 @@
 var mongojs = require('mongojs');
-
+var User = require('./models/user');
+var Settings = require('./config/settings');
+var request = require('request');
 
 module.exports = function (app, db, passport) {
+
+	app.get("/allusers", function(req, res){
+		User.findOne({ 'local.email' :  "larry" }, function(err, user) {
+			// if there are any errors, return the error
+
+			res.send(user);
+
+		});
+	});
+
+
 	app.get("/test2", function(req, res){
 		res.send("hello");
 	});
 
 	app.post("/createSong", isLoggedIn, function(req, res){
 		console.log(req.body);
-
 		var song = req.body;
 
 		var error = null;
@@ -48,10 +60,6 @@ module.exports = function (app, db, passport) {
 		}
 	});
 
-
-
-
-	//?name=
 	app.get("/usersongs", isLoggedIn, function(req, res) {
 
 		console.log(req.query);
@@ -83,6 +91,11 @@ module.exports = function (app, db, passport) {
 			res.send(response);
 		});
 	});
+
+
+
+
+
 
 	app.get("/usersongs", isLoggedIn, function(req, res) {
 		db.songs.find({"user": req.user.local.email}, function(err, response){
@@ -204,6 +217,7 @@ module.exports = function (app, db, passport) {
 	});
 
 	app.get('/songs', isLoggedIn, function(req, res) {
+		console.log(req.user);
 		db.songs.find({"user":req.user.local.email}, function(err, response){
 			res.render('songbrowser.ejs', {
 				"songs" : response
@@ -216,16 +230,23 @@ module.exports = function (app, db, passport) {
 	function isLoggedIn(req, res, next) {
 		// if user is authenticated in the session, carry on
 
-		//if(debug){
-		//	req.user = db.users.find({"local.email":"larryw@mit.edu"});
-		//	return next();
-		//}
-		if (req.isAuthenticated()){
-			return next();
+		if(Settings.bypasslogin){
+			console.log("atetmpting bypass login");
+			db.users.findOne({"local.email":"larryw@mit.edu"}, function(err, response){
+				console.log("Bypassing login");
+				console.log(response);
+				req.user = response;
+				return next();
+			});
+		}
+		else{
+			if (req.isAuthenticated()){
+				return next();
+			}
+
+			res.redirect('/');
 		}
 
-		// if they aren't redirect them to the home page
-		res.redirect('/');
 	}
 
 };

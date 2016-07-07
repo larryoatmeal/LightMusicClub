@@ -73,7 +73,7 @@ var SampleApp = function() {
 
   self.setUpMongo = function() {
     //for mongo
-    self.connection_string = '127.0.0.1:27017/dna';
+    self.connection_string = configDB.url;
 
     // if OPENSHIFT env variables are present, use the available connection info:
     if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
@@ -87,9 +87,6 @@ var SampleApp = function() {
       // self.connection_string = "admin" + ":" +
       //     "QVaVYMlJK1ri" + "@" +
       //    self.connection_string;
-
-
-
       // console.log(self.connection_string);
     };
     console.log(self.connection_string);
