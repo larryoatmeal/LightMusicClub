@@ -1,4 +1,4 @@
-var endpoint = "http://dna-sogima.rhcloud.com/";
+var endpoint = "http://localhost:8080/";
 //var endpoint = "http://localhost:8080/";
 
 $(document).ready(function(){
@@ -37,9 +37,20 @@ $(document).ready(function(){
 	  	//	console.log("HERE");
 	  	//	alert("Title, audio, and midi fields must be completed");
 	  	//}else{
+
+
+
 		$.post(endpoint + "createSong", song).done(function( redir ) {
 			console.log(redir);
 			window.location.href = redir;
+		});
+
+		var audioAuto = new autoComplete({
+			selector: 'input[name="audio"]',
+			minChars: 2,
+			source: function(term, suggest){
+				suggest(["me","no"]);
+			}
 		});
 
 	  	//}

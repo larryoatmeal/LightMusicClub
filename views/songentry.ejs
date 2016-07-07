@@ -3,7 +3,9 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheetLib/auto-complete.css">
     <script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+    <script src= "jsLib/auto-complete.min.js" ></script>
     <script type="text/javascript" src="js/songentry.js"></script>
 </head>
 
@@ -25,6 +27,11 @@
     <% if (success.length > 0) { %>
     <div class="alert alert-success"><%= success %></div>
     <% } %>
+    <!--<form action="/audio/upload" method="POST" enctype="multipart/form-data">-->
+        <!--Select an audio file to upload:-->
+        <!--<input type="file" name="audio">-->
+        <!--<input type="submit" value="Upload Audio">-->
+    <!--</form>-->
     <form id="songEntryForm">
 
         <fieldset class="form-group" required="true">
@@ -32,12 +39,12 @@
             <input class="form-control" id="title" placeholder="Enter title" value="<%= song.name %>">
         </fieldset>
 
+        <!--<fieldset class="form-group" required="true">-->
+            <!--<label for="audio">Audio</label>-->
+            <!--<input class="form-control" id="audio" placeholder="Upload audio " value="<%= song.name %>">-->
+        <!--</fieldset>-->
         <fieldset class="form-group" required="true">
-            <label for="audio">Audio</label>
-            <input class="form-control" id="audio" placeholder="Upload audio " value="<%= song.name %>">
-        </fieldset>
-        <fieldset class="form-group" required="true">
-            <label for="audio">Audio link</label>
+            <label for="audio">Audio name</label>
             <input class="form-control" id="audio" placeholder="Enter audio link" value="<%= song.audio %>">
         </fieldset>
         <fieldset class="form-group" required="true">

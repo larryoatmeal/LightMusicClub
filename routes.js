@@ -2,8 +2,19 @@ var mongojs = require('mongojs');
 var User = require('./models/user');
 var Settings = require('./config/settings');
 var request = require('request');
+var glob = require("glob")
 
 module.exports = function (app, db, passport) {
+
+	app.get("/searchForAudioFiles", function(req,res){
+		glob("*.mp3", {cwd:"public/uploads/audio/"}, function (er, files){
+			res.send(files);
+		})
+
+	});
+
+
+
 
 	app.get("/allusers", function(req, res){
 		User.findOne({ 'local.email' :  "larry" }, function(err, user) {
@@ -32,7 +43,7 @@ module.exports = function (app, db, passport) {
 		if(song._id){
 			song._id = mongojs.ObjectId(song._id);
 		}
-
+		console.log("MODIFYING SONG")
 		if(error != null){
 			req.flash('songEntryError', error);
 			res.send("/entry");
