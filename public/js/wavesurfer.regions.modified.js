@@ -85,6 +85,7 @@ WaveSurfer.Regions = {
                 e.clientX = e.targetTouches[0].clientX;
             }
             var end = my.wavesurfer.drawer.handleEvent(e);
+            console.log(end);
             region.update({
                 start: Math.min(end * duration, start * duration),
                 end: Math.max(end * duration, start * duration)
