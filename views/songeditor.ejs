@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheetLib/auto-complete.css">
+    <script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.52/wavesurfer.min.js"></script>
+    <script src="js/wavesurfer.regions.modified.js"></script>
+
+    <script type="text/javascript" src="js/songeditor.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <% if (song._id) { %>
+    <input type="hidden" class="form-control" id="_id" value="<%= song._id %>">
+    <input type="hidden" class="form-control" id="audioPath" value="<%= song.audio %>">
+    <% } %>
+
+
+    <h1><%= song.name%></h1>
+
+    <h2><%= message %></h2>
+    <div id="waveform"></div>
+
+    <button class="btn btn-primary" id="btnPlay">Play</button>
+    <button class="btn btn-primary" id="btnStop">Stop</button>
+<br>
+    <br>
+    <input id="zoomSlider" type="range" min="1" max="200" value="1" style="width: 100%" />
+
+
+
+
+
+    <% if (message.length > 0) { %>
+    <div class="alert alert-danger"><%= message %></div>
+    <% } %>
+
+    <a href="/songs">Back to song list</a>
+
+
+    <% if (success.length > 0) { %>
+    <div class="alert alert-success"><%= success %></div>
+    <% } %>
+    <!--<form action="/audio/upload" method="POST" enctype="multipart/form-data">-->
+    <!--Select an audio file to upload:-->
+    <!--<input type="file" name="audio">-->
+    <!--<input type="submit" value="Upload Audio">-->
+    <!--</form>-->
+
+</div>
+</body>
+</html>

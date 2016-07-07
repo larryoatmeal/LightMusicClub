@@ -1,4 +1,4 @@
-var endpoint = "http://dna-sogima.rhcloud.com/";
+var endpoint = "http://localhost:8080/";
 //var endpoint = "http://localhost:8080/";
 
 

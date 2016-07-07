@@ -1,6 +1,6 @@
 export class Goo{
 
     hara(love: number){
-        return love * 5;
+        return love * 6;
     }
 }

@@ -6,15 +6,30 @@ var glob = require("glob")
 
 module.exports = function (app, db, passport) {
 
+	app.get("/songedit", isLoggedIn, function(req, res){
+
+		db.songs.findOne({"_id": mongojs.ObjectId(req.query.id)}, function(err, song){
+			console.log(song);
+
+            res.render('songeditor.ejs', {
+				//message: req.flash('signupMessage')
+				user : req.user,
+				message: "",
+				success: "",
+				song: song
+			});
+		});
+
+	});
+
+
+
 	app.get("/searchForAudioFiles", function(req,res){
 		glob("*.mp3", {cwd:"public/uploads/audio/"}, function (er, files){
 			res.send(files);
 		})
 
 	});
-
-
-
 
 	app.get("/allusers", function(req, res){
 		User.findOne({ 'local.email' :  "larry" }, function(err, user) {
