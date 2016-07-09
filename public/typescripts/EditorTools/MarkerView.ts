@@ -1,6 +1,13 @@
 import {Marker} from "./MarkerUtils";
 import {Dimensions} from "../Util/dimensions";
 import {CSSUtil} from "../Util/css";
+import {WavesurferMarkerManager} from "./MarkerManager";
+
+interface WavesurferMarkerParams{
+    containerSelector: string;
+    markersInHeight?: number;
+    snapVertical?: boolean;
+}
 
 
 export class WavesurferMarkerView{
@@ -9,15 +16,24 @@ export class WavesurferMarkerView{
     wrapper: any;
     pxPerSec: number;
     container: string;
-
-
-
-
-    constructor(ws: any, containerSelector: string = "#waveform"){
+    params: WavesurferMarkerParams;
+    constructor(ws: any, paramsInput: WavesurferMarkerParams){
         this.ws = ws;
         this.wrapper = ws.drawer.wrapper;
-        this.container = containerSelector;
+
+        //provide default parameters
+        this.params = this.cleanparams(paramsInput);
+
+        this.container = this.params.containerSelector;
     }
+
+    private cleanparams(paramsInput): WavesurferMarkerParams {
+        return {
+            containerSelector: paramsInput.containerSelector,
+            markersInHeight: paramsInput.markersInHeight ? paramsInput.markersInHeight : 10,
+            snapVertical: paramsInput.snapVertical ? true : false
+        };
+    };
     static getAllMarkers(id: string) {
         return document.getElementsByTagName("marker");
     }
@@ -47,12 +63,15 @@ export class WavesurferMarkerView{
         return document.getElementById(id);
     }
 
+    getMarkerHeightInPercent() : string{
+        return 100/this.params.markersInHeight + "%";
+    }
     update(marker: Marker, markerDOM: any, pixPerSec?: number){
         marker.title = marker.meta.key + " " + marker.meta.title;
         let params = {
             position: 'absolute',
             zIndex: 2,
-            height: '25%',
+            height: this.getMarkerHeightInPercent(),
             //left:  '50px',
             left:  this.getPositionPx(marker.start, pixPerSec),
             top: '0px',
@@ -85,7 +104,7 @@ export class WavesurferMarkerView{
         //let [canvasW, canvasH] = this.getCanvasDim();
         let canvasH = this.getCanvasDim().h;
 
-        $(markerEl).on("drag", function(event, ui){
+        $(markerEl).on("drag", (event, ui) => {
            //let [top, left] = ui.position;
             //console.log(pos);
             //
@@ -97,14 +116,25 @@ export class WavesurferMarkerView{
 
             //ui.position.left = 50;
             ui.position.top = Math.min(ui.position.top, canvasH - markerEl.clientHeight);
+            if(this.params.snapVertical){
+                let gridDistance = canvasH / this.params.markersInHeight;
+                console.log(gridDistance);
+
+                ui.position.top = ui.position.top - ui.position.top % gridDistance;
+
+
+            }
             //
             //if((ui.position.top + markerEl.clientHeight) > canvasH) {
             //    console.log("OVERFLOW");
             //    ui.position.top = CSSUtil.pixify(canvasH - markerEl.clientHeight);
             //}
-
         });
 
+        $(markerEl).on("dragstop", (event, ui) => {
+
+
+        });
 
         this.update(marker, markerEl);
         return markerEl;

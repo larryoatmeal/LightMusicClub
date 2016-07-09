@@ -33,7 +33,7 @@ $(document).ready(function() {
     });
 
     let markerManager = new WavesurferMarkerManager(wavesurfer);
-    let markerView = new WavesurferMarkerView(wavesurfer);
+    let markerView = new WavesurferMarkerView(wavesurfer, {containerSelector: "#waveform", snapVertical: true});
 
     let controller = new MarkerController(markerManager, markerView);
 
