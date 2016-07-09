@@ -17,18 +17,25 @@ export class WavesurferMarkerManager{
     currentTime(){
         return this.wavesurfer.getCurrentTime();
     }
-    addAtCurrent(meta?: MarkerMeta){
+    //returns id of created
+    addAtCurrent(meta?: MarkerMeta): string{
         if(meta){
-            this.add(MarkerFactory.createMarker(meta, this.currentTime()));
+            return this.add(MarkerFactory.createMarker(meta, this.currentTime()));
         }
         else{
-            this.add(MarkerFactory.createMarkerDefault(this.currentTime()));
+            return this.add(MarkerFactory.createMarkerDefault(this.currentTime()));
         }
     }
-    add(marker: Marker){
-        this.markers[UID.generate()] = marker;
+    add(marker: Marker): string{
+        var id = UID.generate();
+        this.markers[id] = marker;
+        return id;
+    }
+    remove(id: string){
+        delete this.markers[id];
     }
     log(){
         return this.markers;
     }
 }
+

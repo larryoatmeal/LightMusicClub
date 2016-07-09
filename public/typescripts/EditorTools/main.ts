@@ -5,7 +5,9 @@ import NumberFormat = Intl.NumberFormat;
 import {UID} from "../Util/uid";
 import {MarkerMeta} from "./MarkerUtils";
 import {Marker} from "./MarkerUtils";
+import {WavesurferMarkerView} from "./MarkerView";
 import {WavesurferMarkerManager} from "./MarkerManager";
+import {MarkerController} from "./MarkerController";
 var endpoint = "http://localhost:8080/";
 //var endpoint = "http://localhost:8080/";
 var audioRoot = "uploads/audio/";
@@ -20,7 +22,8 @@ $(document).ready(function() {
 
     var wavesurfer = WaveSurfer.create({
         container: '#waveform',
-        scrollParent: true
+        scrollParent: true,
+        height: 256
     });
     wavesurfer.enableDragSelection({});
     wavesurfer.load(audioRoot + audioPath);
@@ -30,7 +33,9 @@ $(document).ready(function() {
     });
 
     let markerManager = new WavesurferMarkerManager(wavesurfer);
+    let markerView = new WavesurferMarkerView(wavesurfer);
 
+    let controller = new MarkerController(markerManager, markerView);
 
 
 
@@ -40,7 +45,8 @@ $(document).ready(function() {
     Mousetrap.bind("a", function(){
         console.log("Pressed a");
         console.log(wavesurfer.getCurrentTime());
-        markerManager.addAtCurrent();
+        //markerManager.addAtCurrent();
+        controller.add();
     });
     Mousetrap.bind("d", () => {
         console.log(markerManager.log())

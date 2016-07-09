@@ -1,4 +1,5 @@
 export interface MarkerMeta{
+    title?: string;
     key: string;
     tags: string[];
     args?: string;
@@ -7,7 +8,9 @@ export interface MarkerMeta{
 export interface Marker{
     start: number;
     end?: number;
-    meta: MarkerMeta
+    meta: MarkerMeta;
+    color?: string;//formatted rgba()
+    img?: string;
 }
 
 export class MarkerFactory{
