@@ -1,13 +1,22 @@
-
 import {Marker} from "./MarkerUtils";
+import {Dimensions} from "../Util/dimensions";
+import {CSSUtil} from "../Util/css";
+
+
 export class WavesurferMarkerView{
     style = WaveSurfer.Drawer.style;//helper method to apply css styles
     ws: any;
     wrapper: any;
     pxPerSec: number;
-    constructor(ws: any){
+    container: string;
+
+
+
+
+    constructor(ws: any, containerSelector: string = "#waveform"){
         this.ws = ws;
         this.wrapper = ws.drawer.wrapper;
+        this.container = containerSelector;
     }
     static getAllMarkers(id: string) {
         return document.getElementsByTagName("marker");
@@ -15,6 +24,7 @@ export class WavesurferMarkerView{
     zoom(){
 
     }
+
     getWidth(pxPerSec: number){
         let width: number;
         if (pxPerSec) {
@@ -55,7 +65,7 @@ export class WavesurferMarkerView{
             params["backgroundColor"] = marker.color;
         }
         else{
-            const defaultColor = 'rgba(255, 204, 102, 0.1)';
+            const defaultColor = 'rgba(100, 204, 102, 0.8)';
             params["backgroundColor"] = defaultColor;
         }
         //var width = this.wrapper.scrollWidth;
@@ -68,11 +78,50 @@ export class WavesurferMarkerView{
         markerEl.setAttribute('data-id', id);
 
         //dragging
-        $(markerEl).draggable({ containment: "parent" });
+        $(markerEl).draggable(
+            { containment: "parent" }
+        );
+
+        //let [canvasW, canvasH] = this.getCanvasDim();
+        let canvasH = this.getCanvasDim().h;
+
+        $(markerEl).on("drag", function(event, ui){
+           //let [top, left] = ui.position;
+            //console.log(pos);
+            //
+            console.log({
+                y  : ui.position.top,
+                clientHeight: markerEl.clientHeight,
+                canvasH: canvasH
+            });
+
+            //ui.position.left = 50;
+            ui.position.top = Math.min(ui.position.top, canvasH - markerEl.clientHeight);
+            //
+            //if((ui.position.top + markerEl.clientHeight) > canvasH) {
+            //    console.log("OVERFLOW");
+            //    ui.position.top = CSSUtil.pixify(canvasH - markerEl.clientHeight);
+            //}
+
+        });
+
 
         this.update(marker, markerEl);
         return markerEl;
     }
+
+    getCanvasDim(): Dimensions{
+        let canvas = this.getCanvas();
+        return {
+            w: canvas.width(),
+            h: canvas.height()
+        }
+    }
+
+    getCanvas() {
+        return $(this.container).find("canvas");
+    }
+
 
     add(marker: Marker, id: string){
         console.log(this.wrapper);

@@ -25,7 +25,7 @@ $(document).ready(function() {
         scrollParent: true,
         height: 256
     });
-    wavesurfer.enableDragSelection({});
+    //wavesurfer.enableDragSelection({});
     wavesurfer.load(audioRoot + audioPath);
 
     $("#btnPlay").click(function(ev){
