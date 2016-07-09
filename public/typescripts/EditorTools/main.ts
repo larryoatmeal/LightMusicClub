@@ -51,6 +51,9 @@ $(document).ready(function() {
     Mousetrap.bind("d", () => {
         console.log(markerManager.log())
     });
+    Mousetrap.bind("f", () => {
+       wavesurfer.params.autoCenter = !wavesurfer.params.autoCenter;
+    });
 
     //Time independent marker data
 
