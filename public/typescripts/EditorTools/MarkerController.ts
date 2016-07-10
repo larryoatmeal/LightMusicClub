@@ -10,7 +10,25 @@ export class MarkerController{
     constructor(model:WavesurferMarkerManager, view: WavesurferMarkerView) {
         this.model = model;
         this.view = view;
+
+        //$(view.params.containerSelector).on("markerUpdatePos", (event, id, pos) => {
+        //    console.log("Received marker update event");
+        //    console.log(id);
+        //    console.log(pos);
+        //});
+        this.setupInterconnects();
     }
+
+    setupInterconnects(){
+       this.view.obs.on(WavesurferMarkerView.OnMarkerMoved, (id: string, time: number, verticalPosPercent: number) => {
+            console.log("RECEIVED: " + id);
+           console.log(time);
+           //console.log(pos);
+            this.model.updateTime(id, time);
+       });
+    }
+
+
 
     remove(id: string){
         this.model.remove(id);
@@ -22,9 +40,9 @@ export class MarkerController{
         this.view.add(this.model.markers[id], id);
     }
     //called when manual change
-    syncViewToModel(id: string, marker: Marker){
-        this.view.update(id, marker);
-    }
+    //syncViewToModel(id: string, marker: Marker){
+    //    this.view.update(id, marker);
+    //}
 
     syncModelToView(id: string, params: any){
         let marker = this.model.markers[id];

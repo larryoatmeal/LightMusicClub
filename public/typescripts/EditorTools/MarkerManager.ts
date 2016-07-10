@@ -31,6 +31,11 @@ export class WavesurferMarkerManager{
         this.markers[id] = marker;
         return id;
     }
+    updateTime(id: string, time: number){
+        this.markers[id].start = time;
+    }
+
+
     remove(id: string){
         delete this.markers[id];
     }

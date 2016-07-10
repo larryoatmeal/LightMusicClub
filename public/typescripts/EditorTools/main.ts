@@ -8,10 +8,11 @@ import {Marker} from "./MarkerUtils";
 import {WavesurferMarkerView} from "./MarkerView";
 import {WavesurferMarkerManager} from "./MarkerManager";
 import {MarkerController} from "./MarkerController";
-var endpoint = "http://localhost:8080/";
+const endpoint = "http://localhost:8080/";
 //var endpoint = "http://localhost:8080/";
-var audioRoot = "uploads/audio/";
+const audioRoot = "uploads/audio/";
 
+declare var WaveSurfer: any;
 $(document).ready(function() {
 
     var id = $("#_id").val();
