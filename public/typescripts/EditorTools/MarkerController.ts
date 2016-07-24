@@ -28,8 +28,6 @@ export class MarkerController{
        });
     }
 
-
-
     remove(id: string){
         this.model.remove(id);
         this.view.remove(id);

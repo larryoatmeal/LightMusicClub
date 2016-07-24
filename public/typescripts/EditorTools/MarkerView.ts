@@ -16,7 +16,6 @@ export class WavesurferMarkerView{
 
     public static OnMarkerMoved: string = "MarkerMoved";
 
-
     style = WaveSurfer.Drawer.style;//helper method to apply css styles
     ws: any;
     wrapper: any;
