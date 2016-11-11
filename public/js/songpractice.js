@@ -109,7 +109,7 @@ $(document).ready(function(){
         var m = 1;
 
         while(measureMap[m] != null){
-            console.log("IN");
+            //console.log("IN");
             measureTimes.push(measureMap[m]);
             m += 1;
         }
