@@ -218,7 +218,7 @@ $(document).ready(function(){
         //
         //}
     }
-    
+
     //TODO Replace with json
     function modifyForRepeat(measure){
         if(currentSong.name == "Coldman"){
