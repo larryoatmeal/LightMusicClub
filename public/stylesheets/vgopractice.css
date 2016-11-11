@@ -1,0 +1,30 @@
+.btn-xlarge {
+  padding: 18px 28px;
+  font-size: 22px;
+  line-height: normal;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px; }
+
+.inactive {
+  opacity: 0.5;
+  background-color: grey !important;
+  border-color: grey !important; }
+
+@media (min-width: 769px) {
+  .songDropdown {
+    display: none; } }
+
+.practiceimage {
+  max-width: 300px; }
+
+button:focus {
+  outline: 0 !important; }
+
+.songTitle {
+  display: inline; }
+  @media (max-width: 769px) {
+    .songTitle {
+      display: none; } }
+
+/*# sourceMappingURL=vgopractice.css.map */

@@ -1,0 +1,1 @@
+{"version":3,"file":"alert.js","sourceRoot":"","sources":["alert.ts"],"names":["Alerter","Alerter.constructor","Alerter.greet"],"mappings":";IAAA;QAEIA,iBAAYA,OAAeA;YACvBC,IAAIA,CAACA,QAAQA,GAAGA,OAAOA,CAACA;QAC5BA,CAACA;QAGDD,uBAAKA,GAALA;YACIE,MAAMA,CAACA,QAAQA,GAAGA,IAAIA,CAACA,QAAQA,CAACA;QACpCA,CAACA;QACLF,cAACA;IAADA,CAACA,AAVD,IAUC;IAVY,eAAO,UAUnB,CAAA"}
