@@ -58,7 +58,7 @@ $(document).ready(function(){
     });
 
     $("#loopToggle").on("click", function(){
-        console.log("HELLO");
+        //console.log("HELLO");
         const inactiveClass = "inactive";
         var button = $(this);
         if(button.hasClass(inactiveClass)){
@@ -128,17 +128,17 @@ $(document).ready(function(){
 
             var song = songList[songnum];
             currentSong = song;
-            console.log(songList[songnum]);
+            //console.log(songList[songnum]);
 
             var measureMap = song.measureJson;
 
-            console.log(metaRoot + measureMap);
+            //console.log(metaRoot + measureMap);
             $.getJSON(metaRoot + measureMap, function(data){
                 currentMeasureTimes = convertMeasureMap(data);
-                console.log(data);
-                console.log(currentMeasureTimes);
+                //console.log(data);
+                //console.log(currentMeasureTimes);
                 var songPath = audioRoot + song.audio;
-                console.log(songPath);
+                //console.log(songPath);
 
                 wavesurfer.load(songPath);
 
@@ -175,13 +175,13 @@ $(document).ready(function(){
     function startAndEndTimes(){
         var startMeasureStr =startMeasureDOM.val();
         var endMeasureStr =endMeasureDOM.val();
-        console.log("MEASURE STR");
-        console.log(startMeasureStr);
-        console.log(endMeasureStr);
+        //console.log("MEASURE STR");
+        //console.log(startMeasureStr);
+        //console.log(endMeasureStr);
 
         var startMeasure = 0;
         if(isNaN(startMeasureStr) || !startMeasureStr){
-            console.log("HERE");
+            //console.log("HERE");
             startMeasure = 0;
         }else{
             startMeasure = parseInt(startMeasureStr);
@@ -223,7 +223,7 @@ $(document).ready(function(){
     function modifyForRepeat(measure){
         if(currentSong.name == "Coldman"){
             if(measure > 2){
-                console.log(measure + 2);
+                //console.log(measure + 2);
                 return measure + 2;
             }else{
                 return measure;
@@ -262,7 +262,7 @@ $(document).ready(function(){
         //console.log(wavesurfer.backend.getVolume());
         if(looping && wavesurfer.isPlaying()){
             var time = wavesurfer.getCurrentTime();
-            console.log(time);
+            //console.log(time);
             var se = startAndEndTimes();
             if(se){
                 var start = se[0];
