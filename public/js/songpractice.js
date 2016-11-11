@@ -195,8 +195,8 @@ $(document).ready(function(){
         }
 
         //console.log("MEASURE");
-        console.log(modifyForRepeat(startMeasure));
-        console.log(modifyForRepeat(endMeasure));
+        //console.log(modifyForRepeat(startMeasure));
+        //console.log(modifyForRepeat(endMeasure));
 
         if(startMeasure < endMeasure){
             var startTime = measureToTime(modifyForRepeat(startMeasure));
@@ -231,7 +231,7 @@ $(document).ready(function(){
         }
         else if(currentSong.name == "Zelda's Revenge"){
             if(measure > 4){
-                console.log("HERE");
+                //console.log("HERE");
 
                 return measure + 12;
             }else{
