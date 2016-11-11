@@ -11,10 +11,12 @@
   background-color: grey !important;
   border-color: grey !important; }
 
-@media (min-width: 769px) {
-  .songDropdown {
-    max-width: 300px;
-    display: none; } }
+.songDropdown {
+  width: 90%;
+  font-size: x-large; }
+  @media (min-width: 769px) {
+    .songDropdown {
+      display: none; } }
 
 .practiceimage {
   max-width: 300px; }

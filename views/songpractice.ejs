@@ -96,16 +96,23 @@
             <!--</ul>-->
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header"><p class="songTitle" id="songtitle"></p>
-                <select id="songDropdown" class="songDropdown">
-                    <% for(var i=0; i < songs.length; i++) { %>
-
-                    <option value="<%= i %>"><%= songs[i].name %></option>
-                    <% } %>
-
-                </select>
-                <img id ="mainSpinner" src="images/spinner.gif" alt="HTML5 Icon" style="width:32px;height:32px;">
+            <h1 class="page-header songTitle"><p  id="songtitle"></p>
+                <!--<img id ="mainSpinner" src="images/spinner.gif" alt="HTML5 Icon" style="width:32px;height:32px;">-->
             </h1>
+            <!--<div class="form-inline songDropdown">-->
+                <!---->
+
+            <!--</div>-->
+            <select id="songDropdown" class="songDropdown">
+                <% for(var i=0; i < songs.length; i++) { %>
+
+                <option value="<%= i %>"><%= songs[i].name %></option>
+                <% } %>
+
+            </select>
+
+            <img id ="mainSpinner" src="images/spinner.gif" alt="HTML5 Icon" style="width:32px;height:32px;">
+
 
             <div id="waveform"></div>
 
@@ -127,9 +134,9 @@
                 <!--Loop measures-->
                 <!--</label>-->
 
-                <input id="startMeasure" type="number" min="1" class="form-control" placeholder="Start measure...">
-                <input id="endMeasure" type="number" min="1" class="form-control" placeholder="End measure...">
 
+                <input id="startMeasure" type="tel" min="1" class="form-control" placeholder="Start measure...">
+                <input id="endMeasure" type="tel" min="1" class="form-control" placeholder="End measure...">
             </div>
 
             <br>
