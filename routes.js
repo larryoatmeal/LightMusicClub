@@ -22,7 +22,6 @@ module.exports = function (app, db, passport) {
 		});
 
 	});
-	
 
 	app.get("/searchForAudioFiles", function(req,res){
 		glob("*.mp3", {cwd:"public/uploads/audio/"}, function (er, files){

@@ -1,5 +1,6 @@
 var audioRoot = "uploads/audio/";
 var metaRoot = "uploads/meta/";
+var imageRoot = "uploads/images/";
 /**
  * Created by Larry on 11/9/16.
  */
@@ -8,15 +9,18 @@ var looping = false;
 var songList;
 var currentMeasureTimes = [];
 var songReady = false;
+var currentSong = {};
 
 $(document).ready(function(){
 
     var wavesurfer = WaveSurfer.create({
         container: '#waveform',
         scrollParent: true,
-        pixelRatio: 1
+        pixelRatio: 1,
+        progressColor: "#3498DB"
     });
-    wavesurfer.enableDragSelection({});
+    //wavesurfer.enableDragSelection({});
+
 
     //wavesurfer.load(audioRoot + audioPath);
 
@@ -30,22 +34,24 @@ $(document).ready(function(){
         });
     }
 
-    Mousetrap.bind("space", function(event){
-        wavesurfer.playPause();
+    Mousetrap.bind("p", function(event){
+        wavesurfer.playplay();
     });
 
     $("#playBtn").on("click", function(){
         if(songReady){
-            wavesurfer.play();
+            play();
+            //wavesurfer.softPlay(0.2);
         }
     });
     $("#pauseBtn").on("click", function(){
-        wavesurfer.pause();
+        pause();
     });
     $("#beginBtn").on("click", function(){
         if(wavesurfer.isPlaying()){//if playing, restart
             wavesurfer.stop();
-            wavesurfer.play();
+            //wavesurfer.play();
+            play();
         }else{
             wavesurfer.stop();
         }
@@ -110,11 +116,18 @@ $(document).ready(function(){
         return measureTimes;
     }
 
+    function loadImage(imagePath){
+        $("#mainImage").attr("src", imagePath);
+    }
+
+
     function changeSong(songnum){
         songReady = false;
         startTask();
         if(songList){
+
             var song = songList[songnum];
+            currentSong = song;
             console.log(songList[songnum]);
 
             var measureMap = song.measureJson;
@@ -129,9 +142,13 @@ $(document).ready(function(){
 
                 wavesurfer.load(songPath);
 
+                if(song.background){
+                    var imagePath = imageRoot + song.background;
+                    loadImage(imagePath);
+                }
+
                 $("#songtitle").text(song.name);
             });
-
 
 
         }else{
@@ -177,17 +194,23 @@ $(document).ready(function(){
             endMeasure = parseInt(endMeasureStr);
         }
 
-        console.log("MEASURE");
-        console.log(startMeasure);
-        console.log(endMeasure);
+        //console.log("MEASURE");
+        console.log(modifyForRepeat(startMeasure));
+        console.log(modifyForRepeat(endMeasure));
 
-        var startTime = measureToTime(startMeasure);
-        var endTime = measureToTime(endMeasure+1);//make it inclusive
+        if(startMeasure < endMeasure){
+            var startTime = measureToTime(modifyForRepeat(startMeasure));
+            var endTime = measureToTime(modifyForRepeat(endMeasure));//make it inclusive
 
-        console.log(startTime);
-        console.log(endTime);
 
-        return [startTime, endTime];
+
+            //console.log(startTime);
+            //console.log(endTime);
+
+            return [startTime, endTime];
+        }else{
+            return null;
+        }
         //if(isNaN(startMeasureStr) || isNaN(endMeasureStr)){
         //    return [0, ];
         //}else{
@@ -195,28 +218,86 @@ $(document).ready(function(){
         //
         //}
     }
+    
+    //TODO Replace with json
+    function modifyForRepeat(measure){
+        if(currentSong.name == "Coldman"){
+            if(measure > 2){
+                console.log(measure + 2);
+                return measure + 2;
+            }else{
+                return measure;
+            }
+        }
+        else if(currentSong.name == "Zelda's Revenge"){
+            if(measure > 4){
+                console.log("HERE");
+
+                return measure + 12;
+            }else{
+                return measure;
+            }
+        }else{
+            return measure
+        }
+
+
+    }
+
+
+    var play = function () {
+        wavesurfer.softPlay(0.05);
+    };
+
+    var pause = function(){
+        wavesurfer.softPause(0.005, 0.01);
+    };
+
+    var stop = function(){
+        wavesurfer.softStop(0.1);
+    };
+
 
     function pollTime() {
+        //console.log(wavesurfer.backend.getVolume());
         if(looping && wavesurfer.isPlaying()){
             var time = wavesurfer.getCurrentTime();
             console.log(time);
             var se = startAndEndTimes();
-            var start = se[0];
-            var end = se[1];
+            if(se){
+                var start = se[0];
+                var end = se[1];
 
-            if(time < start || time > end){
-                wavesurfer.pause();
-                wavesurfer.seekTo(start/wavesurfer.getDuration());
-                wavesurfer.play();
+                if(time < start || time > end){
+                    pause();
+                    //wavesurfer.seekTo(start/wavesurfer.getDuration());
+                    //play();
+
+                    setTimeout(function(){
+                        //do what you need here
+                        wavesurfer.seekTo(start/wavesurfer.getDuration());
+                        play();
+                    }, 50);
+
+                }
             }
         }
     }
+
+
     setInterval(pollTime, 50);
 
     wavesurfer.on('ready', function () {
-
         songReady = true;
         endTask();
+    });
+
+    wavesurfer.on('finish', function(){
+        if(looping){
+            if(startMeasureDOM.val() == "" && endMeasureDOM.val() == ""){
+                play();
+            }
+        }
     });
 
 });
