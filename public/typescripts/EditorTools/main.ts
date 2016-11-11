@@ -8,11 +8,102 @@ import {Marker} from "./MarkerUtils";
 import {WavesurferMarkerView} from "./MarkerView";
 import {WavesurferMarkerManager} from "./MarkerManager";
 import {MarkerController} from "./MarkerController";
+import {Bst} from "../bst";
+import {Node} from "../bst";
+import {Interval} from "../bst";
 const endpoint = "http://localhost:8080/";
 //var endpoint = "http://localhost:8080/";
 const audioRoot = "uploads/audio/";
 
 declare var WaveSurfer: any;
+
+//var bst: Bst = new Bst(true);
+//window.bst = bst;
+//var intervals: Interval[] = [];
+//
+//var numKeys = 10000;
+//
+//const windowLength = 10;
+//for (var i = 0; i < numKeys; i++){
+//    var start = Math.round(Math.random() * 100);
+//    var length = Math.round(Math.random() * windowLength);
+//    //bst.insert(start, {"end": start + length, "maxEnd": start + length });
+//    intervals.push({start: start, end: start+length});
+//}
+//
+//intervals.sort(function(a: Interval,b: Interval){
+//   return a.start - b.start;
+//});
+//
+//bst.generateFromSortedList(intervals);
+//
+//var inorder = bst.inorder();
+//
+//if(inorder.length != numKeys){
+//    console.log("BST NOT CORRECT SIZE");
+//}
+//
+//function testSearch(n: number){
+//    for(var i = 0; i < n; i++){
+//        var testStart = Math.random() * 100;
+//        var testEnd = testStart + Math.random() * windowLength;
+//        var result = bst.searchIntervals(testStart, testEnd);
+//    }
+//}
+//
+//function testDumbSearch(n: number){
+//    for(var i = 0; i < n; i++){
+//        var results: Node[] = [];
+//        var testStart = Math.random() * 100;
+//        var testEnd = testStart + Math.random() * windowLength;
+//        for(var j = 0; j < inorder.length; j++){
+//
+//            var interval: Node = inorder[j];
+//            if(Bst.overlap(testStart, testEnd, interval.key, interval.data.end)){
+//                results.push(interval)
+//            }
+//        }
+//    }
+//}
+//
+//
+//console.time('testSearch');
+//testSearch(10000);
+//console.timeEnd('testSearch');
+//
+//console.time('testDumbSearch');
+//testDumbSearch(10000);
+//console.timeEnd('testDumbSearch');
+//
+//
+
+
+
+//for (var i = 0; i < 10; i++){
+//    var testStart = Math.random() * 100;
+//    var testEnd = testStart + Math.random() * windowLength;
+//
+//    var result = bst.searchIntervals(testStart, testEnd);
+//
+//    var allIntervals: Node[] = bst.inorder();
+//    var countOverlap = 0;
+//    for(var j = 0; j < allIntervals.length; j++){
+//        var interval: Node = allIntervals[j];
+//        if(Bst.overlap(testStart, testEnd, interval.key, interval.data.end)){
+//            countOverlap += 1;
+//        }
+//    }
+//
+//    if(countOverlap != result.length){
+//        console.log("NOT THE SAME SIZE");
+//        console.log(countOverlap);
+//        console.log(result.length);
+//    }else{
+//        console.log("CORRECT");
+//    }
+//}
+
+
 $(document).ready(function() {
 
     var id = $("#_id").val();
@@ -30,15 +121,15 @@ $(document).ready(function() {
     wavesurfer.load(audioRoot + audioPath);
 
     $("#btnPlay").click(function(ev){
-        wavesurfer.playPause();
+        wavesurfer.play();
+    });
+    $("#btnStop").click(function(ev){
+       wavesurfer.pause();
     });
 
     let markerManager = new WavesurferMarkerManager(wavesurfer);
     let markerView = new WavesurferMarkerView(wavesurfer, {containerSelector: "#waveform", snapVertical: true});
-
     let controller = new MarkerController(markerManager, markerView);
-
-
 
     Mousetrap.bind("space", (event) => {
         wavesurfer.playPause();

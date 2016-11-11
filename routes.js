@@ -3,6 +3,7 @@ var User = require('./models/user');
 var Settings = require('./config/settings');
 var request = require('request');
 var glob = require("glob")
+const vgouser = "vgo";
 
 module.exports = function (app, db, passport) {
 
@@ -251,14 +252,29 @@ module.exports = function (app, db, passport) {
 		});
 	});
 
+	app.get('/practice', function(req, res){
+		console.log("Practice");
+        db.songs.find({"user": vgouser}, function(err, response){
+			res.render('songpractice.ejs', {
+				"songs" : response
+			});
+		});
+	});
+
+	app.get('/vgosongs', function(req, res){
+		db.songs.find({"user": vgouser}, function(err, response){
+			res.send(response);
+		});
+	});
+
+
 	var debug = true;
 
 	function isLoggedIn(req, res, next) {
 		// if user is authenticated in the session, carry on
-
 		if(Settings.bypasslogin){
 			console.log("atetmpting bypass login");
-			db.users.findOne({"local.email":"larryw@mit.edu"}, function(err, response){
+			db.users.findOne({"local.email":Settings.bypassUserEmail}, function(err, response){
 				console.log("Bypassing login");
 				console.log(response);
 				req.user = response;

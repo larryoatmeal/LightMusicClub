@@ -110,16 +110,22 @@ public class RelevantMIDI{
 	Dictionary<string, List<NoteEvent>> notes;
 	List<TempoEvent> tempos;
 	List<TextEvent> lyrics;
+	List<TimeSignatureEvent> timeSignatures;
 	int ticksPerQuarter;
+	long lastTick;
 
-	public RelevantMIDI (Dictionary<string, List<NoteEvent>> notes, List<TempoEvent> tempos, List<TextEvent> lyrics, int ticksPerQuarter)
+	public RelevantMIDI (Dictionary<string, List<NoteEvent>> notes, List<TempoEvent> tempos, List<TextEvent> lyrics, 
+		List<TimeSignatureEvent> timeSigs, 
+		int ticksPerQuarter,
+		long lastTick)
 	{
 		this.notes = notes;
 		this.tempos = tempos;
 		this.lyrics = lyrics;
 		this.ticksPerQuarter = ticksPerQuarter;
+		this.timeSignatures = timeSigs;
+		this.lastTick = lastTick;
 	}
-	
 
 	struct GoalPost{
 		public readonly long MPQN;
@@ -147,8 +153,6 @@ public class RelevantMIDI{
 //			Console.WriteLine (goal.ToString ());
 		}
 	}
-
-
 	public JSONObject parse(){
 
 		var goalPosts = findTimesAtEachTempoMark ();
@@ -158,6 +162,7 @@ public class RelevantMIDI{
 
 		foreach (var track in notes) {
 			string trackname = track.Key;
+			Console.WriteLine (trackname);
 
 			List<Note> ns = new List<Note> ();
 
@@ -166,6 +171,7 @@ public class RelevantMIDI{
 				if (note.CommandCode == MidiCommandCode.NoteOn) {
 					NoteOnEvent noteOn = note as NoteOnEvent;
 					NoteEvent noteOff = noteOn.OffEvent;
+
 
 					if (noteOff == null) {
 						Console.WriteLine ("warn: hanging note: " + noteOn.ToString ());
@@ -177,8 +183,6 @@ public class RelevantMIDI{
 							noteOn.Velocity);
 						ns.Add (n);
 					}
-
-
 				}
 			}
 
@@ -189,25 +193,65 @@ public class RelevantMIDI{
 		return (new Song (tracks)).ToJSON ();
 	}
 
-	double getActualTime(long absTimeTicks, List<GoalPost> goalposts){
+	public JSONObject timesAtMeasures(){
+		var goalPosts = findTimesAtEachTempoMark ();
+
+		List<long> measureStamps = new List<long>();
+		for (var i = 0; i < timeSignatures.Count; i++) {
+			TimeSignatureEvent ts = timeSignatures [i];
+
+			int ticksPerMeasure = ts.Numerator * ticksPerQuarter * 4 / (1 << ts.Denominator);
+			Console.WriteLine ("TIME CHANGE");
+			Console.WriteLine (ts);
+			Console.WriteLine (ticksPerMeasure);
 
 
-//		goalposts.ForEach (g => Console.WriteLine (g.ToString ()));
-//		Console.WriteLine (absTimeTicks);
+			long nextChange = 0;
+
+			if (i == timeSignatures.Count - 1) {
+				nextChange = lastTick;
+			} else {
+				nextChange = timeSignatures[i+1].AbsoluteTime;
+			}
+
+			long totalTicks = nextChange - ts.AbsoluteTime;
+
+			long numMeasures = totalTicks / ticksPerMeasure;
 
 
-		var goal = goalposts.Last ((goalPost) => absTimeTicks > goalPost.AbsoluteTime);
+			for (int m = 0; m < numMeasures; m++) {
+				long measureStamp = ts.AbsoluteTime + m * ticksPerMeasure;
+				measureStamps.Add (measureStamp);
+			}
+		}
 
-//		Console.WriteLine (goal.ToString ());
+		List<double> measureTimes = measureStamps.Select (mTick => getActualTime (mTick, goalPosts)).ToList();
 
+		JSONObject j = new JSONObject ();
 
+		for (int i = 0; i < measureTimes.Count; i++) {
+//			Console.WriteLine (measureTimes [i]);
+			j.AddField ((i+1).ToString(), (float) measureTimes [i]);
+		}
 
-		return durationInSeconds (goal.MPQN, absTimeTicks - goal.AbsoluteTime) + goal.timeInSeconds;
+			
+		Console.WriteLine ("JSON");
+		return j;
 	}
 
 
 
-
+	double getActualTime(long absTimeTicks, List<GoalPost> goalposts){
+//		goalposts.ForEach (g => Console.WriteLine (g.ToString ()));
+//		Console.WriteLine (absTimeTicks);
+		if (absTimeTicks == 0) {
+			return 0;
+		} else {
+			var goal = goalposts.Last ((goalPost) => absTimeTicks > goalPost.AbsoluteTime);
+			//		Console.WriteLine (goal.ToString ());
+			return durationInSeconds (goal.MPQN, absTimeTicks - goal.AbsoluteTime) + goal.timeInSeconds;
+		}
+	}
 
 	List<GoalPost> findTimesAtEachTempoMark(){
 
@@ -224,6 +268,7 @@ public class RelevantMIDI{
 		
 
 			TempoEvent tempo = tempos [i];
+			Console.WriteLine (tempo.Tempo);
 
 			var tickDiff = tempo.AbsoluteTime - lastGoalPost.AbsoluteTime;
 			double timeDiff = durationInSeconds(lastGoalPost.MPQN, tickDiff);	
@@ -231,6 +276,9 @@ public class RelevantMIDI{
 			GoalPost goalPost = new GoalPost (tempo.MicrosecondsPerQuarterNote, tempo.AbsoluteTime, lastGoalPost.timeInSeconds + timeDiff);
 			goalPosts.Add (goalPost);
 		}
+
+
+
 
 		return goalPosts;
 			
@@ -246,19 +294,14 @@ public class Parser  {
 
 //	public TextAsset midiFile;
 //	public Texture2D tex;
-
-
-
-
-
-	public JSONObject Parse(string midiPath){
+	public RelevantMIDI Parse(string midiPath){
 
 		byte[] midiBytes = File.ReadAllBytes (midiPath);
 
 //		FileWriter //fileWriter = new FileWriter (outName);
 //		//fileWriter.open ();
 
-
+		long lastTime = 0;
 		Stream s = new MemoryStream (midiBytes);
 		MidiFile midiFile = new MidiFile (s);
 		MidiEventCollection midiEvents = midiFile.Events;
@@ -266,9 +309,11 @@ public class Parser  {
 		int ticksPerQuarter = midiEvents.DeltaTicksPerQuarterNote;
 		List<TempoEvent> tempos = new List<TempoEvent>();
 		List<TextEvent> lyrics = new List<TextEvent>();
+		List<TimeSignatureEvent> timeSigs = new List<TimeSignatureEvent>();
 
 		Dictionary<string, List<NoteEvent>> tracks = new Dictionary<string, List<NoteEvent>> ();
-
+		Console.WriteLine ("YO");
+		Console.WriteLine (midiEvents.Tracks);
 
 		for (int i = 0; i < midiEvents.Tracks; i++) {
 //			////fileWriter.log ("**************************");
@@ -285,6 +330,10 @@ public class Parser  {
 					notes.Add (note);
 				} else if (e.CommandCode == MidiCommandCode.NoteOff) {
 					NoteEvent note = e as NoteEvent;
+
+					if (note.AbsoluteTime > lastTime) {
+						lastTime = note.AbsoluteTime;
+					}
 					//fileWriter.log ("NoteOff {0}, {1}", note.NoteName, note.AbsoluteTime);
 					notes.Add (note);
 				} else if (e.CommandCode == MidiCommandCode.ControlChange) {
@@ -298,26 +347,32 @@ public class Parser  {
 					case MetaEventType.TextEvent: // Text event
 					case MetaEventType.Copyright: // Copyright
 					case MetaEventType.SequenceTrackName: // Sequence / Track Name
+						break;
 					case MetaEventType.TrackInstrumentName: // Track instrument name
+						break;
 					case MetaEventType.Lyric: // lyric
 					case MetaEventType.Marker: // marker
 					case MetaEventType.CuePoint: // cue point
 					case MetaEventType.ProgramName:
 					case MetaEventType.DeviceName:
-						//If track name found, add to dictionary
-						if (mType == MetaEventType.TrackInstrumentName) {
-							tracks [(e as TextEvent).ToString ()] = notes;
-						}
-						if (mType == MetaEventType.Lyric) {
-							lyrics.Add (e as TextEvent);
-						}
-						//fileWriter.log ((e as TextEvent).Text);
+//						//If track name found, add to dictionary
+//						if (mType == MetaEventType.TrackInstrumentName) {
+//							tracks [(e as TextEvent).ToString ()] = notes;
+//						}
+//						if (mType == MetaEventType.Lyric) {
+//							lyrics.Add (e as TextEvent);
+//						}
+//						//fileWriter.log ((e as TextEvent).Text);
 						break;
 					case MetaEventType.KeySignature:
 						//fileWriter.log ((e as KeySignatureEvent).ToString ());
 						break;
 					case MetaEventType.TimeSignature:
 						//fileWriter.log ((e as TimeSignatureEvent).ToString ());
+						var tEvent = e as TimeSignatureEvent;
+						timeSigs.Add (tEvent);
+						Console.WriteLine (tEvent);
+						Console.WriteLine (tEvent.DeltaTime);
 						break;
 					case MetaEventType.SetTempo:
 						//fileWriter.log ((e as TempoEvent).ToString ());
@@ -328,13 +383,22 @@ public class Parser  {
 					}
 				}
 			}
+			tracks [i.ToString ()] = notes;
 		}
+
 		//fileWriter.close ();
 
+		Console.WriteLine ("HELLO");
 
-		RelevantMIDI r = new RelevantMIDI (tracks, tempos, lyrics, ticksPerQuarter);
+		RelevantMIDI r = new RelevantMIDI (tracks, tempos, lyrics, timeSigs, ticksPerQuarter, lastTime);
 
-		return r.parse ();
+		Console.WriteLine (midiEvents.DeltaTicksPerQuarterNote);
+
+		return r;
+//		Console.WriteLine (tracks.Count);
+
+
+//		return r.parse ();
 
 //		FileWriter jsonWriter = new FileWriter (outName, ".json");
 //		jsonWriter.open ();

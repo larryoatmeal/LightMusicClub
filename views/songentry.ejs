@@ -47,7 +47,18 @@
             <label for="audio">Audio name</label>
             <input class="form-control" id="audio" placeholder="Enter audio link" value="<%= song.audio %>">
         </fieldset>
-        <fieldset class="form-group" required="true">
+
+        <fieldset class="form-group">
+            <label for="measureJson">Measure JSON</label>
+            <input class="form-control" id="measureJson" placeholder="Enter measures json" value="<%= song.measureJon %>">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="noteJson">Note JSON</label>
+            <input class="form-control" id="noteJson" placeholder="Enter note json" value="<%= song.noteJson %>">
+        </fieldset>
+
+
+        <fieldset class="form-group">
             <label for="midi">MIDI link</label>
             <input  class="form-control" id="midi" placeholder="Enter midi link" value="<%= song.midi %>">
         </fieldset>

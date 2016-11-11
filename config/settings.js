@@ -1,5 +1,5 @@
 module.exports = {
     'bypasslogin' : true,
-    'bypassUserEmail' : "Larry",
+    'bypassUserEmail' : "vgo",
     'debug': true
 };

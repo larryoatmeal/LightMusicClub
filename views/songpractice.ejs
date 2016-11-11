@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheetLib/auto-complete.css">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/vgopractice.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="./Dashboard Template for Bootstrap_files/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="./Dashboard Template for Bootstrap_files/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./Dashboard Template for Bootstrap_files/dashboard.css" rel="stylesheet">
+
+    <script   src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.0.52/wavesurfer.min.js"></script>
+    <script   src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"   integrity="sha256-xNjb53/rY+WmG+4L6tTl9m6PpqknWZvRt0rO1SRnJzw="   crossorigin="anonymous"></script>
+    <script src="js/wavesurfer.regions.modified.js"></script>
+    <!--<script src="typescripts/EditorTools/main.js"></script>-->
+
+    <script src="js/songpractice.js"></script>
+
+
+    <script src="jsLib/mousetrap.min.js"></script>
+    <!--<script data-main="typescripts/EditorTools/main" src="jsLib/require.js"></script>-->
+    <!--<script type="text/javascript" src="js/songeditor.js"></script>-->
+</head>
+
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">-->
+                <!--<span class="sr-only">Toggle navigation</span>-->
+                <!--<span class="icon-bar"></span>-->
+                <!--<span class="icon-bar"></span>-->
+                <!--<span class="icon-bar"></span>-->
+            <!--</button>-->
+            <a class="navbar-brand" >VGO Practice</a>
+
+
+        </div>
+        <!--<div id="navbar" class="navbar-collapse collapse">-->
+            <!--<ul class="nav navbar-nav navbar-right">-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Dashboard</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Settings</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Profile</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Help</a></li>-->
+            <!--</ul>-->
+            <!--<form class="navbar-form navbar-right">-->
+                <!--<input type="text" class="form-control" placeholder="Search...">-->
+            <!--</form>-->
+        <!--</div>-->
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <% for(var i=0; i < songs.length; i++) { %>
+
+                    <li songNum="<%= i %>"><a><%= songs[i].name %></a></li>
+
+                <% } %>
+
+                <!--<li class="active"><a href="http://getbootstrap.com/examples/dashboard/#">Overview <span class="sr-only">(current)</span></a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Reports</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Analytics</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/#">Export</a></li>-->
+            </ul>
+
+
+            <!--<ul class="nav nav-sidebar">-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">Nav item</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">Nav item again</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">One more nav</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">Another nav item</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">More navigation</a></li>-->
+            <!--</ul>-->
+            <!--<ul class="nav nav-sidebar">-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">Nav item again</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">One more nav</a></li>-->
+                <!--<li><a href="http://getbootstrap.com/examples/dashboard/">Another nav item</a></li>-->
+            <!--</ul>-->
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header"><p class="songTitle" id="songtitle"></p>
+                <select id="songDropdown" class="songDropdown">
+                    <% for(var i=0; i < songs.length; i++) { %>
+
+                    <option value="<%= i %>"><%= songs[i].name %></option>
+                    <% } %>
+
+                </select>
+                <img id ="mainSpinner" src="images/spinner.gif" alt="HTML5 Icon" style="width:32px;height:32px;">
+
+            </h1>
+
+            <div id="waveform"></div>
+
+            <div class="form-inline">
+                <button id="playBtn" type="button" class="btn-xlarge btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+                </button>
+                <button id="pauseBtn" type="button" class="btn-xlarge btn-danger"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span></button>
+                <button id="beginBtn" type="button" class="btn-xlarge btn-primary"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></button>
+
+
+            </div>
+            <br>
+            <div class="form-inline">
+
+                <button id="loopToggle" type="button" class="btn-xlarge btn-warning inactive"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+
+                <!--<label class="form-check-label">-->
+                <!--<input type="checkbox" class="form-check-input">-->
+                <!--Loop measures-->
+                <!--</label>-->
+
+                <input id="startMeasure" type="number" min="1" class="form-control" placeholder="Start measure...">
+                <input id="endMeasure" type="number" min="1" class="form-control" placeholder="End measure...">
+
+            </div>
+
+            <br>
+
+
+
+            <!--<div class="row placeholders">-->
+                <!--<div class="col-xs-6 col-sm-3 placeholder">-->
+                    <!--<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">-->
+                    <!--<h4>Label</h4>-->
+                    <!--<span class="text-muted">Something else</span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-6 col-sm-3 placeholder">-->
+                    <!--<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">-->
+                    <!--<h4>Label</h4>-->
+                    <!--<span class="text-muted">Something else</span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-6 col-sm-3 placeholder">-->
+                    <!--<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">-->
+                    <!--<h4>Label</h4>-->
+                    <!--<span class="text-muted">Something else</span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-6 col-sm-3 placeholder">-->
+                    <!--<img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">-->
+                    <!--<h4>Label</h4>-->
+                    <!--<span class="text-muted">Something else</span>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<h2 class="sub-header">Section title</h2>-->
+        </div>
+    </div>
+</div>
+
+
+<script src="Dashboard Template for Bootstrap_files/bootstrap.min.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="Dashboard Template for Bootstrap_files/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="Dashboard Template for Bootstrap_files/ie10-viewport-bug-workaround.js"></script>
+
+</body>
+
+</html>

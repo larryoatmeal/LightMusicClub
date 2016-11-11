@@ -57,7 +57,7 @@ var SampleApp = function() {
    */
   self.setupVariables = function() {
     //  Set the environment variables we need.
-    self.ipaddress = process.env.OPENSHIFT_NODEJS_IP;
+    self.ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
     self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
     if (typeof self.ipaddress === "undefined") {
@@ -237,9 +237,6 @@ var SampleApp = function() {
     // self.app.use(self.app.router);
 
     require("./routes")(self.app, self.db, passport);
-
-
-
   };
 
 

@@ -1,4 +1,3 @@
-var endpoint = "http://localhost:8080/";
 //var endpoint = "http://localhost:8080/";
 
 $(document).ready(function(){
@@ -16,6 +15,8 @@ $(document).ready(function(){
 		var album = $("#album").val();
 		var pub = $("#public").is(":checked");
 
+		var measureJson = $("#measureJson").val();
+		var noteJson = $("#noteJson").val();
 
 		var song = {
 	  		"name":  name,
@@ -26,7 +27,9 @@ $(document).ready(function(){
 	  		"difficulty": difficulty,
 	  		"composer": composer,
 	  		"album": album,
-			"public": pub
+			"public": pub,
+			"measureJson":measureJson,
+			"noteJson":noteJson
 	  	};
 
 		if($("#_id")){
@@ -40,7 +43,10 @@ $(document).ready(function(){
 
 
 
-		$.post(endpoint + "createSong", song).done(function( redir ) {
+
+
+
+		$.post("/createSong", song).done(function( redir ) {
 			console.log(redir);
 			window.location.href = redir;
 		});
