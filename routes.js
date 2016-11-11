@@ -216,7 +216,11 @@ module.exports = function (app, db, passport) {
 
 	app.get('/', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('home.ejs', { message: req.flash('signupMessage') });
+
+
+		//res.render('home.ejs', { message: req.flash('signupMessage') });
+		res.render('vgohome.ejs');
+
 	});
 
 	app.get('/logout', function(req, res) {

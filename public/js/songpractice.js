@@ -203,7 +203,6 @@ $(document).ready(function(){
             var endTime = measureToTime(modifyForRepeat(endMeasure));//make it inclusive
 
 
-
             //console.log(startTime);
             //console.log(endTime);
 
