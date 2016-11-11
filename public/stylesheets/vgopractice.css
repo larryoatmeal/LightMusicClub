@@ -13,6 +13,7 @@
 
 @media (min-width: 769px) {
   .songDropdown {
+    max-width: 300px;
     display: none; } }
 
 .practiceimage {
