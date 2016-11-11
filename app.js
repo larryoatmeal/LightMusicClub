@@ -23,6 +23,7 @@ var cookieParser = require('cookie-parser');
 var session      = require('express-session');
 
 var configDB = require('./config/database.js');
+var settings = require('./config/settings.js');
 var mongoose = require('mongoose');
 
 require('./config/passport')(passport);// pass passport for configuration
@@ -58,7 +59,7 @@ var SampleApp = function() {
   self.setupVariables = function() {
     //  Set the environment variables we need.
     self.ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-    self.port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+    self.port      = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
     if (typeof self.ipaddress === "undefined") {
       //  Log errors on OpenShift but continue w/ 127.0.0.1 - this
@@ -82,20 +83,15 @@ var SampleApp = function() {
           process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
           process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
           process.env.OPENSHIFT_APP_NAME;
-    }else{
-      //local
-      // self.connection_string = "admin" + ":" +
-      //     "QVaVYMlJK1ri" + "@" +
-      //    self.connection_string;
-      // console.log(self.connection_string);
-    };
-    console.log(self.connection_string);
-
+    }
+    if(process.env.DBSTRING){
+          self.connection_string = process.env.DBSTRING;
+    }
+    //console.log(self.connection_string);
     mongoose.connect(self.connection_string);
 
     self.db = mongojs(self.connection_string, ['books','songs', 'users']);
   };
-
 
 
   /**
@@ -258,10 +254,15 @@ var SampleApp = function() {
    */
   self.start = function() {
     //  Start the app on the specific interface (and port).
-    self.app.listen(self.port, self.ipaddress, function() {
-      console.log('%s: Node server started on %s:%d ...',
-          Date(Date.now() ), self.ipaddress, self.port);
-    });
+    if(process.env.PORT){//for MODULUS
+      console.log("USING MODULUS");
+      self.app.listen(process.env.PORT);
+    }else{
+      self.app.listen(self.port, self.ipaddress, function() {
+        console.log('%s: Node server started on %s:%d ...',
+            Date(Date.now() ), self.ipaddress, self.port);
+      });
+    }
   };
 
 };   /*  Sample Application.  */

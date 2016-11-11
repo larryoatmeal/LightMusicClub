@@ -1,5 +1,6 @@
 module.exports = {
     'bypasslogin' : true,
     'bypassUserEmail' : "vgo",
-    'debug': true
+    'debug': true,
+    'modulus': true
 };
