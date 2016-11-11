@@ -98,9 +98,6 @@ $(document).ready(function(){
 
     }
 
-
-
-
     function convertMeasureMap(measureMap){
         var measureTimes = [];
         var m = 1;
@@ -142,7 +139,6 @@ $(document).ready(function(){
         }
     }
 
-
     function measureToTime(m){
         var m0based = m - 1;
 
@@ -154,9 +150,7 @@ $(document).ready(function(){
         }else{
             return currentMeasureTimes[m0based];
         }
-
     }
-
 
     const startMeasureDOM = $("#startMeasure");
     const endMeasureDOM = $("#endMeasure");

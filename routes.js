@@ -2,11 +2,11 @@ var mongojs = require('mongojs');
 var User = require('./models/user');
 var Settings = require('./config/settings');
 var request = require('request');
-var glob = require("glob")
+var glob = require("glob");
 const vgouser = "vgo";
+var debug = true;
 
 module.exports = function (app, db, passport) {
-
 	app.get("/songedit", isLoggedIn, function(req, res){
 
 		db.songs.findOne({"_id": mongojs.ObjectId(req.query.id)}, function(err, song){
@@ -22,8 +22,7 @@ module.exports = function (app, db, passport) {
 		});
 
 	});
-
-
+	
 
 	app.get("/searchForAudioFiles", function(req,res){
 		glob("*.mp3", {cwd:"public/uploads/audio/"}, function (er, files){
@@ -118,11 +117,6 @@ module.exports = function (app, db, passport) {
 			res.send(response);
 		});
 	});
-
-
-
-
-
 
 	app.get("/usersongs", isLoggedIn, function(req, res) {
 		db.songs.find({"user": req.user.local.email}, function(err, response){
@@ -223,19 +217,7 @@ module.exports = function (app, db, passport) {
 
 	app.get('/', function(req, res) {
 		// render the page and pass in any flash data if it exists
-
-
-
-
 		res.render('home.ejs', { message: req.flash('signupMessage') });
-
-		//if(authenticationOff){
-		//
-        //
-		//}
-
-
-
 	});
 
 	app.get('/logout', function(req, res) {
@@ -268,7 +250,6 @@ module.exports = function (app, db, passport) {
 	});
 
 
-	var debug = true;
 
 	function isLoggedIn(req, res, next) {
 		// if user is authenticated in the session, carry on
