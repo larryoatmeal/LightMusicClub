@@ -5,6 +5,7 @@ var fs      = require('fs');
 var mongojs = require('mongojs');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+var fileUpload = require('express-fileupload');
 
 var app = express();
 
@@ -14,6 +15,8 @@ app.use(bodyParser.urlencoded({
 }));
 // self.app.use(express.bodyParser.json())
 app.use(bodyParser.json());
+app.use(fileUpload());
+
 
 var passport = require('passport');
 var flash    = require('connect-flash');

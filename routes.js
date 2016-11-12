@@ -6,7 +6,9 @@ var glob = require("glob");
 const vgouser = "vgo";
 var debug = true;
 
+
 module.exports = function (app, db, passport) {
+
 	app.get("/songedit", isLoggedIn, function(req, res){
 
 		db.songs.findOne({"_id": mongojs.ObjectId(req.query.id)}, function(err, song){
@@ -252,8 +254,6 @@ module.exports = function (app, db, passport) {
 		});
 	});
 
-
-
 	function isLoggedIn(req, res, next) {
 		// if user is authenticated in the session, carry on
 		if(Settings.bypasslogin){
@@ -272,7 +272,36 @@ module.exports = function (app, db, passport) {
 
 			res.redirect('/');
 		}
-
 	}
 
+	app.post('/upload', isLoggedIn, function(req, res) {
+		var sampleFile;
+
+		if (!req.files) {
+			res.send('No files were uploaded.');
+			return;
+		}
+		sampleFile = req.files.sampleFile;
+		var directory = req.body.directory;
+		console.log(req.body.directory);
+		console.log(req.files);
+		console.log(sampleFile);
+
+		var name = sampleFile.name;
+		var directoryPath = "public/uploads/" + directory + "/" + name;
+
+		sampleFile.mv(directoryPath, function(err) {
+			if (err) {
+				res.status(500).send(err);
+			}
+			else {
+				res.send('File uploaded!');
+			}
+		});
+	});
+
+	app.get("/upload", function(req, res){
+		res.render('upload.ejs');
+
+	});
 };

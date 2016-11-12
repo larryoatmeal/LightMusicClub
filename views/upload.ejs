@@ -1,0 +1,41 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>MIT VGO</title>
+    <link rel="stylesheet" href="stylesheets/home.css"> <!-- load fontawesome -->
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <style>
+        body        { padding-top:80px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>UPLOAD</h1>
+
+    <form ref='uploadForm'
+          id='uploadForm'
+          action='/upload'
+          method='post'
+          encType="multipart/form-data">
+        <input type="text" name="directory"/>
+        <input type="file" name="sampleFile" />
+        <input type='submit' value='Upload!' />
+    </form>
+
+
+    <!--<div class="jumbotron text-center">-->
+    <!--<h1> MIT Video Game Orchestra</h1>-->
+
+    <!--&lt;!&ndash;<p>Login or Register with:</p>&ndash;&gt;-->
+    <!--&lt;!&ndash;<a href="/login" class="btn btn-default"><span class="fa fa-user"></span> Local Login</a>&ndash;&gt;-->
+    <!--&lt;!&ndash;<a href="/signup" class="btn btn-default"><span class="fa fa-user"></span> Local Signup</a>&ndash;&gt;-->
+    <!--</div>-->
+
+</div>
+</body>
+</html>
