@@ -1,10 +1,12 @@
 ﻿<Properties StartupItem="MIDIParser/MIDIParser.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MIDIParser/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="MIDIParser/MIDIParser.cs">
     <Files>
-      <File FileName="MIDIParser/JSON/JSONObject.cs" Line="1" Column="1" />
-      <File FileName="MIDIParser/MIDIParser.cs" Line="336" Column="15" />
-      <File FileName="MIDIParser/Program.cs" Line="19" Column="4" />
+      <File FileName="MIDIParser/MIDI/TempoEvent.cs" Line="62" Column="23" />
+      <File FileName="MIDIParser/JSON/JSONObject.cs" Line="335" Column="25" NotebookId="1" />
+      <File FileName="MIDIParser/MIDIParser.cs" Line="277" Column="29" NotebookId="1" />
+      <File FileName="MIDIParser/Program.cs" Line="59" Column="49" NotebookId="1" />
+      <File FileName="MIDIParser/MIDI/TimeSignatureEvent.cs" Line="70" Column="38" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
